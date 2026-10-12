@@ -294,6 +294,7 @@ export function mountEnvironment(
           compileMs: compiled.compileMs,
           inputValidationMs: prepared.validationMs,
           moduleLoadMs: value.moduleLoadMs,
+          runtimeLoadMs:value.runtimeLoadMs,
           inputBridgeMs: value.bridgeMs,
           firstExecutionAndConsumptionMs: value.firstMs,
           outputFormattingMs: value.serialisationMs,

@@ -49,6 +49,7 @@ self.onmessage = async ({ data }) => {
       return;
     }
     const base = artifact.bundleUrl;
+    const runtimeStart=performance.now();
     const { loadInk } = await import(
       /* @vite-ignore */ new URL("ink-gpu.mjs", base).href
     );
@@ -67,6 +68,7 @@ self.onmessage = async ({ data }) => {
       placementProfile: record?.profile ?? null,
     };
     engine = await loadInk(base, options);
+    const runtimeLoadMs=performance.now()-runtimeStart;
     let training: any = null;
     if (data.settings.train) {
       send({
@@ -206,6 +208,7 @@ self.onmessage = async ({ data }) => {
         stages: receipt.stages,
         counters: receipt.counters,
         training,
+        runtimeLoadMs,
         profileLoaded: !!record || !!training,
       },
     });
