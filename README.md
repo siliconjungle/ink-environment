@@ -34,7 +34,7 @@ The application uses a service worker to serve locally compiled bundles from
 Cache Storage, with a namespace restricted to this environment's bundle URLs.
 No cross-origin isolation headers or compilation server are required.
 The first packed compilation downloads roughly 90 MB of Clang/LLVM and C headers;
-state-only compilation needs the approximately 1.6 MB Ink compiler. Assets are
+state-only compilation needs the approximately 3.7 MiB Ink compiler. Assets are
 loaded from the same deployment. Code and inputs are never sent to a server.
 
 ## Adaptive execution and measurements
@@ -83,17 +83,17 @@ Clang, bundle service worker and runtime assets). Worker assets beside the
 package module must also be served. `dispose()` stops pending work and removes the
 editor. Draft storage is optional; compiled bundles and profiles use browser caches.
 
-Independent package pins are in `compiler/Cargo.toml` and `Cargo.lock` and
-`scripts/build-assets.mjs`. Generated `compiler-info.json` and
-`runtime/assets.json` record identities and SHA-256 hashes. The initial distribution
-pin is `ed39c953d626f29c8687290b50057c28488acfca`; its core subtree is identical to
-`1a7a64559d0acf8c91c386bbbc8471ce327b68b4`, the revision used by the pinned lowerers.
+Exact inputs are recorded in `ink-pins.json` and the matching Cargo manifest/lock.
+Generated `compiler-info.json`, `environment-info.json` and `runtime/assets.json`
+record the distribution, editor, package identities and SHA-256 hashes. The editor
+and documentation can therefore describe the same published language revision
+without assuming that the editor repository and compiler share a Git history.
 
 Browser Clang comes from [browsercc](https://github.com/BertalanD/browsercc),
 version 0.1.1, MIT. Ink assets retain their upstream provenance. This package has
 not been published to npm.
 
-Production browser verification is recorded in `browser-evidence.json`.
+Earlier production browser verification is retained in `browser-evidence.json` at its original package pins. It is historical evidence, not a timing claim for the updated compiler.
 The edited three-stage example compiled and returned the same u32 result on
 Wasm/JavaScript and actual WebGPU (three device dispatches). Explicit profiling
 selected GPU for the first two stages and Wasm for the reduction; heldout output
