@@ -1,0 +1,27 @@
+[package]
+name = "ink-browser-compiler"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+ink-core = { git = "https://github.com/siliconjungle/ink-lang", rev = "1a7a64559d0acf8c91c386bbbc8471ce327b68b4" }
+ink-lowering-js = { git = "https://github.com/siliconjungle/ink-lowering-js", rev = "bb7d4070b07f5a9e52d138b9d7f5172eedbd6f82" }
+ink-lowering-c = { git = "https://github.com/siliconjungle/ink-lowering-c", rev = "fa1bbe5955ca5a809235a1f33b5753de6db1391e" }
+ink-lowering-gpu = { git = "https://github.com/siliconjungle/ink-lowering-gpu", rev = "bfe24e11367b3f7a8fcb5399b531d4c28b5e5c97" }
+ink-lowering-wasm = { git = "https://github.com/siliconjungle/ink-lowering-wasm", rev = "c822edf42201cf0f50fd0ffc28e61e02e64dae94" }
+ink-abi = { git = "https://github.com/siliconjungle/ink-abi", rev = "c800d60a4f49790dced13fc930b84ba7815d60a0" }
+sha2 = "0.10"
+serde_json = { version = "1", features = ["float_roundtrip"] }
+
+[profile.release]
+lto = true
+opt-level = "s"
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[workspace]

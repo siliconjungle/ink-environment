@@ -1,0 +1,13 @@
+node_modules/
+compiler/target/
+dist/
+public/ink-compiler.wasm
+public/compiler-info.json
+preview*.jpg
+.DS_Store
+*.log
+
+public/clang/
+public/runtime/
+
+.smoke/

@@ -1,0 +1,35 @@
+{
+  "name": "@siliconjungle/ink-environment",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A local browser editor, compiler and execution environment for Ink",
+  "private": true,
+  "exports": {
+    ".": "./dist/package/index.js",
+    "./style.css": "./dist/package/style.css"
+  },
+  "files": [
+    "dist/package",
+    "dist/app",
+    "compiler/Cargo.toml",
+    "compiler/Cargo.lock",
+    "compiler/src",
+    "README.md"
+  ],
+  "scripts": {
+    "build:compiler": "node scripts/build-compiler.mjs",
+    "check": "tsc --noEmit",
+    "test": "cargo test --locked --manifest-path compiler/Cargo.toml && node --test tests/*.test.mjs",
+    "build": "npm run check && vite build --mode package && vite build",
+    "dev": "vite --host 127.0.0.1 --port 4321 --strictPort",
+    "preview": "vite preview --host 127.0.0.1 --port 4321 --strictPort",
+    "prepare:assets": "node scripts/build-assets.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vite": "8.3.4"
+  },
+  "dependencies": {
+    "browsercc": "0.1.1"
+  }
+}
