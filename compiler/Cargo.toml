@@ -1,4 +1,5 @@
 [package]
+license = "MIT"
 name = "ink-browser-compiler"
 version = "0.1.0"
 edition = "2021"
@@ -8,12 +9,12 @@ publish = false
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-ink-core = { git = "https://github.com/siliconjungle/ink-lang", rev = "2fb9b87679635c646417c1f906c7363485621008" }
-ink-lowering-js = { git = "https://github.com/siliconjungle/ink-lowering-js", rev = "58a157213f767ece00c63769a6b429eadfebec0c" }
-ink-lowering-c = { git = "https://github.com/siliconjungle/ink-lowering-c", rev = "d5fb3080f7b7a54017db9d19c80e7d87d653860d" }
-ink-lowering-gpu = { git = "https://github.com/siliconjungle/ink-lowering-gpu", rev = "8b9fc7f130f0356cdaff8f5822cf6eb7429e9343" }
-ink-lowering-wasm = { git = "https://github.com/siliconjungle/ink-lowering-wasm", rev = "29d247e66baed6c00302da48f75ca2c406ee7017" }
-ink-abi = { git = "https://github.com/siliconjungle/ink-abi", rev = "c800d60a4f49790dced13fc930b84ba7815d60a0" }
+ink-core = { git = "https://github.com/siliconjungle/ink-lang", rev = "51af4dda101688c78f68684cf574ab613edf6c36" }
+ink-lowering-js = { git = "https://github.com/siliconjungle/ink-lowering-js", rev = "12f535564488318ba5a709dff274f2c6151e0998" }
+ink-lowering-c = { git = "https://github.com/siliconjungle/ink-lowering-c", rev = "cc3dd719106a17f14f3249712fa21514a5f38877" }
+ink-lowering-gpu = { git = "https://github.com/siliconjungle/ink-lowering-gpu", rev = "4b4edc75d678155b0ed923f9e7c27bbe118617c2" }
+ink-lowering-wasm = { git = "https://github.com/siliconjungle/ink-lowering-wasm", rev = "8ed92b356867d5e587289d18ba349fc7756cc872" }
+ink-abi = { git = "https://github.com/siliconjungle/ink-abi", rev = "ba66a365b4e7c2fe80fff4e7443a781f61eb9a56" }
 sha2 = "0.10"
 serde_json = { version = "1", features = ["float_roundtrip"] }
 

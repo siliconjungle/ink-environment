@@ -11,3 +11,6 @@ public/clang/
 public/runtime/
 
 .smoke/
+
+public/environment-info.json
+public/ink-license.txt

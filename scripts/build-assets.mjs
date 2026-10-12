@@ -1,11 +1,7 @@
 import { mkdir, writeFile, copyFile, readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
-const pins = {
-  runtime: "86cbfc06c299d390df03ac0bb43483cd3b40aaee",
-  abi: "c800d60a4f49790dced13fc930b84ba7815d60a0",
-  gpu: "8b9fc7f130f0356cdaff8f5822cf6eb7429e9343",
-  planner: "95c3fefc4e181a2f78b9795e0a8c0848adc3bbeb",
-};
+const versions = JSON.parse(await readFile(new URL('../ink-pins.json', import.meta.url), 'utf8'));
+const pins = Object.fromEntries(['runtime', 'abi', 'gpu', 'planner'].map(name => [name, versions[name]]));
 const repos = {
   runtime: "ink-runtime",
   abi: "ink-abi",
@@ -96,3 +92,5 @@ for (const name of [
   await copyFile(`node_modules/browsercc/dist/${name}`, `public/clang/${name}`);
 await copyFile("node_modules/browsercc/LICENSE", "public/clang/LICENSE");
 console.log("Pinned Ink runtime, planner and browser Clang assets ready.");
+
+await copyFile("LICENSE", "public/ink-license.txt");

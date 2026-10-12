@@ -14,7 +14,9 @@
     "compiler/Cargo.toml",
     "compiler/Cargo.lock",
     "compiler/src",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "ink-pins.json"
   ],
   "scripts": {
     "build:compiler": "node scripts/build-compiler.mjs",
@@ -31,5 +33,10 @@
   },
   "dependencies": {
     "browsercc": "0.1.1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/siliconjungle/ink-environment.git"
   }
 }

@@ -65,7 +65,7 @@ dependencies = [
 [[package]]
 name = "ink-abi"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-abi?rev=c800d60a4f49790dced13fc930b84ba7815d60a0#c800d60a4f49790dced13fc930b84ba7815d60a0"
+source = "git+https://github.com/siliconjungle/ink-abi?rev=ba66a365b4e7c2fe80fff4e7443a781f61eb9a56#ba66a365b4e7c2fe80fff4e7443a781f61eb9a56"
 dependencies = [
  "serde",
  "serde_json",
@@ -88,7 +88,7 @@ dependencies = [
 [[package]]
 name = "ink-core"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-lang?rev=2fb9b87679635c646417c1f906c7363485621008#2fb9b87679635c646417c1f906c7363485621008"
+source = "git+https://github.com/siliconjungle/ink-lang?rev=51af4dda101688c78f68684cf574ab613edf6c36#51af4dda101688c78f68684cf574ab613edf6c36"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -100,7 +100,7 @@ dependencies = [
 [[package]]
 name = "ink-lowering-c"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-lowering-c?rev=d5fb3080f7b7a54017db9d19c80e7d87d653860d#d5fb3080f7b7a54017db9d19c80e7d87d653860d"
+source = "git+https://github.com/siliconjungle/ink-lowering-c?rev=cc3dd719106a17f14f3249712fa21514a5f38877#cc3dd719106a17f14f3249712fa21514a5f38877"
 dependencies = [
  "ink-abi",
  "ink-core",
@@ -111,7 +111,7 @@ dependencies = [
 [[package]]
 name = "ink-lowering-gpu"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-lowering-gpu?rev=8b9fc7f130f0356cdaff8f5822cf6eb7429e9343#8b9fc7f130f0356cdaff8f5822cf6eb7429e9343"
+source = "git+https://github.com/siliconjungle/ink-lowering-gpu?rev=4b4edc75d678155b0ed923f9e7c27bbe118617c2#4b4edc75d678155b0ed923f9e7c27bbe118617c2"
 dependencies = [
  "ink-abi",
  "ink-core",
@@ -124,7 +124,7 @@ dependencies = [
 [[package]]
 name = "ink-lowering-js"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-lowering-js?rev=58a157213f767ece00c63769a6b429eadfebec0c#58a157213f767ece00c63769a6b429eadfebec0c"
+source = "git+https://github.com/siliconjungle/ink-lowering-js?rev=12f535564488318ba5a709dff274f2c6151e0998#12f535564488318ba5a709dff274f2c6151e0998"
 dependencies = [
  "ink-abi",
  "ink-core",
@@ -135,7 +135,7 @@ dependencies = [
 [[package]]
 name = "ink-lowering-rust"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-lowering-rust?rev=b7e744fff78ea310270234e20e7b76143269f337#b7e744fff78ea310270234e20e7b76143269f337"
+source = "git+https://github.com/siliconjungle/ink-lowering-rust?rev=0357ca01b192261cc93453eff3f73254c31e57fe#0357ca01b192261cc93453eff3f73254c31e57fe"
 dependencies = [
  "ink-abi",
  "ink-core",
@@ -149,7 +149,7 @@ dependencies = [
 [[package]]
 name = "ink-lowering-wasm"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-lowering-wasm?rev=29d247e66baed6c00302da48f75ca2c406ee7017#29d247e66baed6c00302da48f75ca2c406ee7017"
+source = "git+https://github.com/siliconjungle/ink-lowering-wasm?rev=8ed92b356867d5e587289d18ba349fc7756cc872#8ed92b356867d5e587289d18ba349fc7756cc872"
 dependencies = [
  "ink-abi",
  "ink-core",
@@ -159,7 +159,7 @@ dependencies = [
 [[package]]
 name = "ink-native-support"
 version = "0.1.0"
-source = "git+https://github.com/siliconjungle/ink-native-support?rev=5aebdddb60fbae6c006ec4dcfecd8fa283455194#5aebdddb60fbae6c006ec4dcfecd8fa283455194"
+source = "git+https://github.com/siliconjungle/ink-native-support?rev=a5f47e9eb44f7509cd9fa6bd64943096c453afb1#a5f47e9eb44f7509cd9fa6bd64943096c453afb1"
 
 [[package]]
 name = "itoa"
@@ -282,9 +282,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "3.0.8"
+version = "3.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01016da373cd8f7ef12624f796309f5c31ba8d646dd08856c02cd741d823c622"
+checksum = "d78c8dee4c7bf0e14673097256fed6142ce9d3b85a408189d07482442145823b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -299,9 +299,9 @@ checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.26"
+version = "1.0.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d245f478577f809a851594d02313b640fb437e0bb33866753cff937863096954"
+checksum = "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563"
 
 [[package]]
 name = "version_check"

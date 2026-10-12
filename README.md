@@ -116,3 +116,7 @@ uses the exact JSON codec. Ordinary JSON.parse can irreversibly round proof data
 Contract proof identities, full backend conformance and browser Compiler API
 checks are recorded in the distribution's
 [source-contract validation report](https://github.com/siliconjungle/ink-lang/tree/main/reports/source-contracts-2026-10-12).
+
+## License and versions
+
+This standalone editor, browser compiler transport and documentation are [MIT licensed](LICENSE). Third-party dependencies and browser Clang retain their own licenses and notices. `ink-pins.json` records the exact compiler, lowerings, runtime and planner inputs; generated `compiler-info.json` and `environment-info.json` bind the built compiler and editor revision. The site exposes those manifests alongside the editor.

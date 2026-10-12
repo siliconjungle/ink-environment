@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "distribution": "c30236f29d7eab18b2f1b07a8e39b50d8023eaf6",
+  "core": "51af4dda101688c78f68684cf574ab613edf6c36",
+  "javascript": "12f535564488318ba5a709dff274f2c6151e0998",
+  "c": "cc3dd719106a17f14f3249712fa21514a5f38877",
+  "gpu": "4b4edc75d678155b0ed923f9e7c27bbe118617c2",
+  "wasm": "8ed92b356867d5e587289d18ba349fc7756cc872",
+  "runtime": "449857995a2e8778f98d58fc125158fca93016d4",
+  "planner": "3623796f4d8df8e6212833241fa84accb9b8b8a1",
+  "abi": "ba66a365b4e7c2fe80fff4e7443a781f61eb9a56"
+}
