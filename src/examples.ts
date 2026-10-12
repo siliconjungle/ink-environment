@@ -36,11 +36,7 @@ keep total_price: u64 = sum(Prices.values());
 change set_price(item: u64, price: u64)
     -> Result<Unit, String> writes(Prices)
 {
-    if Prices.contains(item) {
-        Prices.replace(item, price);
-    } else {
-        Prices.insert(item, price);
-    }
+    Prices.put(item, price);
     return Ok(());
 }
 
