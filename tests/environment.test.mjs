@@ -117,3 +117,13 @@ test("benchmark consumes outputs and checks exact repeated values", async () => 
     "[18446744073709551615]",
   );
 });
+
+
+test("static contracts share collection semantics and reject false implementations", async () => {
+  const example=examples.find(x=>x.id==="contracts"),artifact=compile(example.source),module=await load(artifact);
+  assert.equal(module.functions.next(41),42);
+  assert.equal(module.functions.distinct([1,2,1]),false);
+  assert.equal(module.functions.same_bag([1,2,1],[2,1,1]),true);
+  assert.throws(()=>compile(example.source.replace("return 1+x;","return x;")),/contract|proof|ensures/);
+  assert.throws(()=>request({op:"compile",source:example.source,contractEvidence:{schema:1,semantics:"ink-contracts-v1",source_sha256:"wrong"}}));
+});

@@ -46,7 +46,17 @@ pub fn handle(request: &Value) -> Result<Value, String> {
             if source.len() > MAX_SOURCE {
                 return Err("Source exceeds 128 KiB.".into());
             }
-            let program = syntax::parse(source)?;
+            let mut program = syntax::parse(source)?;
+            if let Some(evidence) = request.get("contractEvidence").filter(|v| !v.is_null()) {
+                let evidence = if let Some(raw) = evidence.as_str() {
+                    serde_json::from_str(raw)
+                        .map_err(|e| format!("Invalid contract evidence JSON: {e}"))?
+                } else {
+                    serde_json::from_value(evidence.clone())
+                        .map_err(|e| format!("Invalid contract evidence: {e}"))?
+                };
+                ink_core::contracts::attach(&mut program, evidence)?;
+            }
             let checked = CheckedModule::from_source(program)?;
             let emission = ink_lowering_js::lower(&checked)?;
             if emission.javascript.len() > MAX_REQUEST {
@@ -284,5 +294,14 @@ mod tests {
         )
         .is_err());
         assert!(prepare(&c, "@script", r#"[{"call":"missing","args":[]}]"#).is_err());
+    }
+    #[test]
+    fn static_contracts_are_checked_before_browser_emission() {
+        let prefix = "module contracts; spec fn next(x:u32)->u32 ensures result==x+1;";
+        compile(&format!(
+            "{prefix} implementation direct for next{{return x+1;}}"
+        ));
+        assert!(handle(&json!({"op":"compile","source":format!("{prefix} implementation bad for next{{return x;}}") })).is_err());
+        assert!(handle(&json!({"op":"compile","source":format!("{prefix} implementation direct for next{{return x+1;}}"),"contractEvidence":{"schema":1,"semantics":"ink-contracts-v1","source_sha256":"wrong"}})).is_err());
     }
 }

@@ -55,8 +55,8 @@ export class Compiler {
       this.worker!.postMessage({ id, compilerUrl: this.url, request });
     });
   }
-  async compile(source: string): Promise<Artifact> {
-    const data = await this.request({ op: "compile", source });
+  async compile(source: string, contractEvidence?: unknown): Promise<Artifact> {
+    const data = await this.request({ op: "compile", source, ...(contractEvidence === undefined ? {} : { contractEvidence }) });
     return {
       ...data.ok,
       compileMs: data.elapsedMs,

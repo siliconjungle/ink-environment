@@ -147,4 +147,21 @@ query get(key: u64) -> Option<u64> reads(Counters) {
       2,
     ),
   },
+  {
+    id: "contracts",
+    name: "Contracts · two proved implementations",
+    entry: "next",
+    source: `module Contracts;
+
+spec fn next(x:u32)->u32 ensures result == x+1;
+implementation direct for next { return x+1; }
+implementation commuted for next { return 1+x; }
+
+fn distinct(xs:List<u32>)->Bool { return unique(xs); }
+fn same_bag(xs:List<u32>,ys:List<u32>)->Bool {
+    return multiset(xs) == multiset(ys);
+}
+`,
+    input: "[41]",
+  },
 ];

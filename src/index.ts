@@ -2,7 +2,8 @@ import "./style.css";
 import { enableBundles } from "./bundles";
 import { Compiler, Runner, type Artifact } from "./client";
 import { examples } from "./examples";
-export { examples };
+export { examples, Compiler, Runner };
+export type { Artifact };
 export type EnvironmentOptions = {
   compilerUrl: string;
   homeUrl?: string;

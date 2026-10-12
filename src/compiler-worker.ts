@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import { compileWasm, publishBundle } from "./clang.mjs";
+import { stringifyExactJSON } from "./exact-json.mjs";
 let instance: WebAssembly.Instance | undefined;
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8", { fatal: true });
@@ -21,7 +22,7 @@ function request(value: unknown) {
     ink_env_request(p: number, n: number): number;
     ink_env_response_len(): number;
   };
-  const bytes = encoder.encode(JSON.stringify(value));
+  const bytes = encoder.encode(stringifyExactJSON(value));
   const input = exports.ink_env_alloc(bytes.length);
   if (!input) throw Error("Compiler request exceeds its memory limit.");
   try {

@@ -99,3 +99,20 @@ Wasm/JavaScript and actual WebGPU (three device dispatches). Explicit profiling
 selected GPU for the first two stages and Wasm for the reduction; heldout output
 checks and the warm/lifetime gate passed. These are measurements on this Mac and
 browser session, not a general speed claim.
+
+The Contracts example checks two implementations of a static specification.
+`Compiler.compile(source, contractEvidence?)` accepts source-bound evidence from
+Ink's contract proof producer. It is checked before any JavaScript, C/Wasm or
+WGSL emission; missing or invalid required proofs are compilation errors. This
+browser package does not run the external knowledge proof search. Simple clauses
+can be established by the core's default normalization proof. The emitted hosts
+retain precondition, transaction and invariant-checked restore behavior.
+
+Pass contract evidence as its original JSON text to preserve full-width proof
+integers: `await compiler.compile(source, await response.text())`. Programmatic
+objects must use BigInt for integers outside JavaScript’s safe range; the worker
+uses the exact JSON codec. Ordinary JSON.parse can irreversibly round proof data.
+
+Contract proof identities, full backend conformance and browser Compiler API
+checks are recorded in the distribution's
+[source-contract validation report](https://github.com/siliconjungle/ink-lang/tree/main/reports/source-contracts-2026-10-12).

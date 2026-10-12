@@ -1,10 +1,10 @@
 import { mkdir, writeFile, copyFile, readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 const pins = {
-  runtime: "b225add86164ca478ef611079cd27d4e3e3a59f3",
+  runtime: "86cbfc06c299d390df03ac0bb43483cd3b40aaee",
   abi: "c800d60a4f49790dced13fc930b84ba7815d60a0",
-  gpu: "bfe24e11367b3f7a8fcb5399b531d4c28b5e5c97",
-  planner: "7c02795a10f783429575de6e72c6da196d96fb1a",
+  gpu: "8b9fc7f130f0356cdaff8f5822cf6eb7429e9343",
+  planner: "95c3fefc4e181a2f78b9795e0a8c0848adc3bbeb",
 };
 const repos = {
   runtime: "ink-runtime",
