@@ -10,9 +10,9 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 ink-core = { git = "https://github.com/siliconjungle/ink-lang", rev = "13b88691d9742b941554cd931ad94ad5f20182a6" }
-ink-lowering-js = { git = "https://github.com/siliconjungle/ink-lowering-js", rev = "1c10148a16b8617edd3e20d589e1345792df7fdb" }
+ink-lowering-js = { git = "https://github.com/siliconjungle/ink-lowering-js", rev = "a6d74714548e4757c8b0d2a41f6790c467f90288" }
 ink-lowering-c = { git = "https://github.com/siliconjungle/ink-lowering-c", rev = "f8e928abe0c2e8a5608d75f9d37e7fb795a997d4" }
-ink-lowering-gpu = { git = "https://github.com/siliconjungle/ink-lowering-gpu", rev = "dfcac1927ad62add1b3c4087da9202e7ca93a004" }
+ink-lowering-gpu = { git = "https://github.com/siliconjungle/ink-lowering-gpu", rev = "a11dff20b40ddc58f80ac74e81a41fd072549c5c" }
 ink-lowering-wasm = { git = "https://github.com/siliconjungle/ink-lowering-wasm", rev = "78ad662e6699e573c4bf58c43a2d459b1b50ed58" }
 ink-abi = { git = "https://github.com/siliconjungle/ink-abi", rev = "90a7a93c6be095cb906601ec2b40c8a1467adbdf" }
 sha2 = "0.10"
