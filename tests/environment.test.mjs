@@ -97,6 +97,19 @@ test("exact u64 reaches generated JS without rounding", async () => {
   assert.equal(await execute(module, "word", input), 18446744073709551615n);
   assert.throws(() => prepare(artifact, "word", "[18446744073709551616]"));
 });
+test("browser emission exposes owned portable and agreed-schema boundaries", async () => {
+  const artifact = compile("module transport; record Packet { key:String, count:u64, bits:f32, } fn echo(packet:Packet)->Packet{return packet;}"), module = await load(artifact);
+  const value = {key:"\ufeff雪",count:18446744073709551615n,bits:{F32Bits:0x7fa00001}}, codecs = module.valueCodecs.echo;
+  for (const compact of [false,true]) {
+    const input = compact ? codecs.arguments.compact() : codecs.arguments;
+    const output = compact ? codecs.result.compact() : codecs.result;
+    const bytes = input.encode({packet:value}), before = bytes.slice();
+    const reply = (compact ? module.callCompact : module.callBinary)("echo",bytes);
+    assert.deepEqual(bytes,before);assert.deepEqual(output.decode(reply),value);
+    reply.fill(0);assert.deepEqual(bytes,before);
+    for (let end=0;end<bytes.length;end++) assert.throws(()=>input.validate(bytes.subarray(0,end)));
+  }
+});
 test("benchmark consumes outputs and checks exact repeated values", async () => {
   let calls = 0;
   const module = {
