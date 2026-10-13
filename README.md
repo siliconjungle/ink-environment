@@ -120,3 +120,5 @@ checks are recorded in the distribution's
 ## License and versions
 
 This standalone editor, browser compiler transport and documentation are [MIT licensed](LICENSE). Third-party dependencies and browser Clang retain their own licenses and notices. `ink-pins.json` records the exact compiler, lowerings, runtime and planner inputs; generated `compiler-info.json` and `environment-info.json` bind the built compiler and editor revision. The site exposes those manifests alongside the editor.
+
+The pinned compiler emits the general portable-value and JSON codec interfaces. The editor remains a single-file compiler; the specification site's JSON flow demo runs a linked `std:json` program compiled by the distribution. Dynamic JSON stays on the CPU host.
