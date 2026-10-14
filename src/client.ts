@@ -7,7 +7,8 @@ export type Artifact = {
   bundle?: any;
   bundleUrl?: string;
   host_reason?: string;
-  wasmBytes?: number;
+  rust?: string;
+  rust_reason?: string;
 };
 type Pending = {
   resolve: (v: any) => void;

@@ -38,6 +38,6 @@ for (const example of examples) {
   );
   await writeFile(`.smoke/${example.id}/input.json`, prepared.input);
   console.log(
-    `${example.id}: checked, ${artifact.bundle ? "JS/C/WGSL" : "host: " + artifact.host_reason}`,
+    `${example.id}: checked, ${artifact.bundle ? "JS/Rust/WGSL" : "host: " + artifact.host_reason}`,
   );
 }

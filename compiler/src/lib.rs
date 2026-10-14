@@ -63,28 +63,29 @@ pub fn handle(request: &Value) -> Result<Value, String> {
                 return Err("Generated JavaScript exceeds 8 MiB.".into());
             }
             let bundle = (|| -> Result<Value, String> {
-                let p = checked.pure_program()?;
-                let c = ink_lowering_c::compute::emit_c(p)?;
+                checked.pure_program()?;
+                let rust = ink_lowering_wasm::lower_with_abi(&checked, true)?.rust;
                 let mut gpu = ink_lowering_gpu::compute::lower(&checked)?;
                 gpu.manifest["javascript"] = emission.manifest.clone();
                 gpu.manifest["javascript_sha256"] = json!(format!(
                     "{:x}",
                     Sha256::digest(emission.javascript.as_bytes())
                 ));
-                gpu.manifest["cpu_c_sha256"] = json!(format!("{:x}", Sha256::digest(c.as_bytes())));
+                gpu.manifest["cpu_rust_sha256"] = json!(format!("{:x}", Sha256::digest(rust.as_bytes())));
                 gpu.manifest["runtime_abi"] = json!("ink-packed-pipeline-v2");
                 gpu.manifest["destination_abi"] = json!({"name":"ink-packed-into-v1","symbol":"ink_compute_into","count":"words32","ownership":"caller-owned","capacity":"trusted","alignment":8,"aliasing":"destination-disjoint-from-all-reachable-inputs","scratch_lifetime":"call-mark-rewind","prepared_instance":"exclusive"});
-                let wasm = ink_lowering_wasm::lower_with_abi(&checked, true)?;
                 Ok(
-                    json!({"manifest":gpu.manifest,"shaders":gpu.shaders,"c":c,"exports":wasm.exports}),
+                    json!({"manifest":gpu.manifest,"shaders":gpu.shaders,"rust":rust}),
                 )
             })();
+            let rust = ink_lowering_rust::state_native::emit(checked.program());
+            let (rust, rust_reason) = match rust { Ok(value) => (json!(value),Value::Null), Err(error) => (Value::Null,json!(error)) };
             let (bundle, reason) = match bundle {
                 Ok(v) => (v, Value::Null),
                 Err(e) => (Value::Null, json!(e)),
             };
             Ok(
-                json!({"bundle":bundle,"host_reason":reason,"javascript":emission.javascript,"manifest":emission.manifest,
+                json!({"bundle":bundle,"host_reason":reason,"rust":rust,"rust_reason":rust_reason,"javascript":emission.javascript,"manifest":emission.manifest,
                 "core":String::from_utf8(checked.bytes()?).map_err(|e|e.to_string())?}),
             )
         }
@@ -269,6 +270,14 @@ mod tests {
         .is_err());
         let c=compile("module generic;fn identity<T>(x:T)->T{return x;} fn run(x:u32)->u32{return identity<u32>(x);}");
         assert!(c["javascript"].as_str().unwrap().contains("export"));
+    }
+    #[test]
+    fn pure_browser_targets_export_rust_and_have_no_c_toolchain() {
+        let c = compile("module targets;fn total(xs:List<u32>)->u32{return sum(xs);}");
+        assert!(c["rust"].as_str().unwrap().contains("l_total"));
+        assert!(c["bundle"]["rust"].as_str().unwrap().contains("ink_compute_call"));
+        assert!(c["bundle"].get("c").is_none());
+        assert!(c["bundle"]["manifest"]["cpu_rust_sha256"].is_string());
     }
     #[test]
     fn trusted_generated_calls_receive_checked_exact_values() {

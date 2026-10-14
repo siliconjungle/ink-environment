@@ -43,7 +43,7 @@ writeFileSync(
       abi: pins.abi,
       sha256: createHash("sha256").update(bytes).digest("hex"),
       bytes: bytes.length,
-      output: ["JavaScript", "C/Wasm", "WGSL"],
+      output: ["JavaScript", "Rust", "Rust/Wasm source", "WGSL"],
       knowledge_search: false,
     },
     null,

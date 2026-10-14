@@ -40,16 +40,16 @@ export function mountEnvironment(
     ).delete(new URL("profile.json", owned.bundleUrl));
   }
   root.classList.add("ink-environment");
-  root.innerHTML = `<header class="env-header"><div><a class="env-brand">ink</a><span class="env-slash">/ environment</span></div><span class="env-local">JS / Wasm / WebGPU</span></header>
+  root.innerHTML = `<header class="env-header"><div><a class="env-brand">ink</a><span class="env-slash">/ environment</span></div><span class="env-local">JS / WebGPU · Rust exports</span></header>
   <div class="env-intro"><div><h1>Write. Compile. Run.</h1><p>Edit Ink. Compile real targets. See the results and where the work ran.</p></div><a class="env-repo" href="https://github.com/siliconjungle/ink-environment">Editor source ↗</a></div>
-  <div class="env-toolbar"><label>Example <select id="env-example" aria-label="Example program"></select></label><div class="env-actions"><button id="env-compile" class="env-primary">Compile</button><button id="env-run" disabled>Run</button><button id="env-benchmark" disabled>Benchmark</button><button id="env-train" disabled>Profile targets</button><button id="env-stop" disabled>Stop</button></div></div>
-  <div class="env-execution"><label>Execution <select id="env-backend"><option value="auto">Adaptive</option><option value="javascript">JavaScript · diagnostic</option><option value="cpu">Wasm · diagnostic</option><option value="gpu">WebGPU · diagnostic</option></select></label><span>Profile targets once to give adaptive placement local performance evidence.</span></div><div class="env-status" role="status" aria-live="polite"><span id="env-status">Ready to compile.</span><span id="env-size"></span></div>
+  <div class="env-toolbar"><label>Example <select id="env-example" aria-label="Example program"></select></label><div class="env-actions"><button id="env-compile" class="env-primary">Compile</button><button id="env-run" disabled>Run</button><button id="env-benchmark" disabled>Benchmark</button><button id="env-stop" disabled>Stop</button></div></div>
+  <div class="env-execution"><label>Execution <select id="env-backend"><option value="javascript">JavaScript</option><option value="gpu">WebGPU · requires device support</option></select></label><span>Rust/Wasm builds use the native Ink toolchain.</span></div><div class="env-status" role="status" aria-live="polite"><span id="env-status">Ready to compile.</span><span id="env-size"></span></div>
   <div class="env-grid"><section class="env-panel env-source"><div class="env-panel-heading"><h2>Ink source</h2><span>⌘ / Ctrl + Enter to compile</span></div><label class="env-sr" for="env-source">Ink source</label><div class="env-editor"><pre id="env-lines" aria-hidden="true"></pre><textarea id="env-source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div></section>
-  <div class="env-right"><section class="env-panel"><div class="env-panel-heading"><h2>Inputs</h2><select id="env-entry" aria-label="Entry point" disabled><option>Compile to choose an entry</option></select></div><p id="env-signature" class="env-signature">A state script or a function's JSON arguments.</p><label class="env-sr" for="env-input">Input JSON</label><textarea id="env-input" class="env-input" spellcheck="false" wrap="off"></textarea><details class="env-help"><summary>Input format</summary><p>Functions take a JSON argument array, for example <code>[[1, 2, 3], 2]</code>. State scripts take <code>[{"call":"total","args":[]}]</code>. Integer tokens keep their exact precision; use <code>{"Int":"123"}</code> for exact Int values. Pure pipelines use <code>{"inputs":{},"steps":[{"id":"a","call":"transform","args":[[1,2,3]]}]}</code>; later arguments can use <code>{"step":"a"}</code>. Single-file programs only. Profiles use a 256-call lifetime.</p></details></section>
+  <div class="env-right"><section class="env-panel"><div class="env-panel-heading"><h2>Inputs</h2><select id="env-entry" aria-label="Entry point" disabled><option>Compile to choose an entry</option></select></div><p id="env-signature" class="env-signature">A state script or a function's JSON arguments.</p><label class="env-sr" for="env-input">Input JSON</label><textarea id="env-input" class="env-input" spellcheck="false" wrap="off"></textarea><details class="env-help"><summary>Input format</summary><p>Functions take a JSON argument array, for example <code>[[1, 2, 3], 2]</code>. State scripts take <code>[{"call":"total","args":[]}]</code>. Integer tokens keep their exact precision; use <code>{"Int":"123"}</code> for exact Int values. Pure pipelines use <code>{"inputs":{},"steps":[{"id":"a","call":"transform","args":[[1,2,3]]}]}</code>; later arguments can use <code>{"step":"a"}</code>. Single-file programs only.</p></details></section>
   <section class="env-panel env-result"><div class="env-panel-heading"><h2>Results</h2><button id="env-download-result" disabled>Download JSON</button></div><pre id="env-result" tabindex="0">Compile your program, then run it.</pre></section></div></div>
   <section class="env-panel env-placement"><div class="env-panel-heading"><h2>Execution placement</h2><span id="env-targets">Compile to inspect targets</span></div><div id="env-stage-strip" class="env-stage-strip"></div><pre id="env-placement">No execution yet.</pre></section><section class="env-panel env-performance"><div class="env-panel-heading"><h2>Performance</h2><span>Measured here, on this browser</span></div><div class="env-metrics"><div><span>Compile</span><strong id="env-compile-time">—</strong></div><div><span>First execution + output consumption</span><strong id="env-first-time">—</strong></div><div><span>Repeated median · output checked</span><strong id="env-median-time">—</strong></div><div><span>Samples</span><strong id="env-sample-count">—</strong></div></div><p id="env-measure-note">Run records one execution. Benchmark repeats the complete workload, starting with fresh state each time and consuming every returned value.</p><details><summary>Timing boundary and samples</summary><pre id="env-details">No measurements yet.</pre><p>Execution includes function calls or state creation and the full command script, plus output consumption and repeatability checks. Compiler loading, compilation, input validation/conversion, module loading and output formatting are separate. Rendering and worker message delivery are outside the execution timer. These are local measurements, not a comparison against another language or backend.</p></details></section>
-  <details class="env-generated"><summary>Compiled artifacts <span id="env-code-size"></span></summary><button id="env-download-js" disabled>Download module</button><pre id="env-generated-code" tabindex="0">No compiled module yet.</pre></details>
-  <footer class="env-footer"><p>Code and inputs stay in your browser. Ink’s checker and target emitters run in Wasm; browser Clang compiles the emitted C. The compiled Ink runtime executes the program.</p><p>Eligible pure pipelines use the existing adaptive planner across JS, Wasm and WebGPU. State executes on the host. Profiling is explicit; Run never collects profitability measurements. External knowledge search and linked imports are outside this single-file environment.</p><p><a href="https://github.com/siliconjungle/ink-environment">Standalone editor repository</a> · <a href="${new URL("ink-license.txt", new URL(options.compilerUrl, document.baseURI)).href}">MIT license</a> · <a href="${new URL("environment-info.json", new URL(options.compilerUrl, document.baseURI)).href}">Compiler and package versions</a></p></footer>`;
+  <details class="env-generated"><summary>Compiled artifacts <span id="env-code-size"></span></summary><button id="env-download-js" disabled>Download JavaScript</button><button id="env-download-rust" disabled>Download Rust source</button><pre id="env-generated-code" tabindex="0">No compiled module yet.</pre></details>
+  <footer class="env-footer"><p>Code and inputs stay in your browser. Ink’s checker and target emitters run in Wasm; Rust source builds through the native Ink toolchain. The compiled Ink runtime executes the program.</p><p>Eligible pure pipelines execute on JavaScript or WebGPU. State executes on the host. Run never collects profitability measurements. External knowledge search and linked imports are outside this single-file environment.</p><p><a href="https://github.com/siliconjungle/ink-environment">Standalone editor repository</a> · <a href="${new URL("ink-license.txt", new URL(options.compilerUrl, document.baseURI)).href}">MIT license</a> · <a href="${new URL("environment-info.json", new URL(options.compilerUrl, document.baseURI)).href}">Compiler and package versions</a></p></footer>`;
   const element = <T extends HTMLElement>(id: string) =>
     root.querySelector<T>(`#env-${id}`)!;
   const source = element<HTMLTextAreaElement>("source"),
@@ -60,7 +60,6 @@ export function mountEnvironment(
     runButton = element<HTMLButtonElement>("run"),
     benchmarkButton = element<HTMLButtonElement>("benchmark"),
     stopButton = element<HTMLButtonElement>("stop"),
-    trainButton = element<HTMLButtonElement>("train"),
     backend = element<HTMLSelectElement>("backend");
   root.querySelector<HTMLAnchorElement>(".env-brand")!.href =
     options.homeUrl ?? "https://siliconjungle.github.io/ink-spec-site/";
@@ -80,8 +79,7 @@ export function mountEnvironment(
     compileButton.disabled = busy;
     runButton.disabled = !ready;
     benchmarkButton.disabled = !ready;
-    trainButton.disabled =
-      !ready || !artifact?.bundleUrl || entry.value === "@script";
+
     backend.disabled =
       busy || !artifact?.bundleUrl || entry.value === "@script";
     stopButton.disabled = !busy;
@@ -178,7 +176,7 @@ export function mountEnvironment(
       if (value.bundleUrl) {
         const option = document.createElement("option");
         option.value = "@pipeline";
-        option.textContent = "Pure pipeline · adaptive placement";
+        option.textContent = "Pure pipeline · fixed placement";
         entry.append(option);
       }
       if (value.manifest.state?.actions?.length) {
@@ -204,10 +202,10 @@ export function mountEnvironment(
       resetRun();
       element("compile-time").textContent = format(value.compileMs);
       element("targets").textContent = value.bundleUrl
-        ? `JS + Wasm (${value.wasmBytes?.toLocaleString()} bytes) + WGSL`
+        ? "JavaScript + WGSL · Rust/Wasm source exported"
         : "JavaScript host";
       element("placement").textContent = value.bundleUrl
-        ? "Compiled targets ready. Adaptive starts with CPU until a measured profile supports another placement."
+        ? "Compiled targets ready. Choose JavaScript or an eligible WebGPU target."
         : (value.host_reason ?? "Host execution");
       element("generated-code").textContent =
         (value.bundle
@@ -215,7 +213,7 @@ export function mountEnvironment(
               {
                 manifest: value.bundle.manifest,
                 shaders: value.bundle.shaders,
-                c: value.bundle.c,
+                rust: value.bundle.rust,
               },
               null,
               2,
@@ -228,6 +226,7 @@ export function mountEnvironment(
       element("code-size").textContent =
         `· ${new TextEncoder().encode(value.javascript).length.toLocaleString()} bytes`;
       element<HTMLButtonElement>("download-js").disabled = false;
+      element<HTMLButtonElement>("download-rust").disabled = !value.rust;
       status("Compiled. Choose inputs, then Run or Benchmark.");
       save();
     } catch (error) {
@@ -245,7 +244,7 @@ export function mountEnvironment(
       }
     }
   }
-  async function run(benchmark: boolean, train = false) {
+  async function run(benchmark: boolean) {
     if (!artifact || source.value !== compiledSource || busy) return;
     const current = ++sequence;
     busy = true;
@@ -260,9 +259,7 @@ export function mountEnvironment(
       );
       if (disposed || current !== sequence) return;
       status(
-        train
-          ? "Profiling pure targets…"
-          : benchmark
+        benchmark
             ? "Benchmarking compiled execution…"
             : "Running compiled Ink…",
       );
@@ -272,7 +269,7 @@ export function mountEnvironment(
         prepared.input,
         benchmark,
         (message) => status(String(message)),
-        { train, backend: backend.value },
+        { backend: backend.value },
       );
       if (disposed || current !== sequence) return;
       resultJson = value.resultJson;
@@ -309,7 +306,6 @@ export function mountEnvironment(
           placement: value.placement,
           stages: value.stages,
           counters: value.counters,
-          training: value.training,
           coreIdentity: compiled.manifest.core_sha256,
         },
         null,
@@ -353,7 +349,6 @@ export function mountEnvironment(
             : undefined,
           stages: value.stages,
           counters: value.counters,
-          profileValidation: value.training?.heldout,
         },
         null,
         2,
@@ -416,7 +411,6 @@ export function mountEnvironment(
   compileButton.onclick = compile;
   runButton.onclick = () => run(false);
   benchmarkButton.onclick = () => run(true);
-  trainButton.onclick = () => run(true, true);
   stopButton.onclick = () => {
     sequence++;
     compiler.stop();
@@ -478,6 +472,7 @@ export function mountEnvironment(
     if (artifact)
       download(artifact.javascript, "ink-program.mjs", "text/javascript");
   };
+  element("download-rust").onclick = () => { if (artifact?.rust) download(artifact.rust, "ink-program.rs", "text/plain"); };
   element("download-result").onclick = () =>
     download(resultJson, "ink-result.json", "application/json");
   source.value = options.initialSource ?? selectedExample.source;

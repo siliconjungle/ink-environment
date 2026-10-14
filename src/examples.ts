@@ -1,7 +1,7 @@
 export const examples = [
   {
     id: "adaptive",
-    name: "Pipeline · three stages, adaptive placement",
+    name: "Pipeline · three stages, fixed placement",
     entry: "@pipeline",
     source: `module Adaptive;
 

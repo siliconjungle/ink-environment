@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "distribution": "331406c2a47e41f2d79b5584ff567e7f982f7afd",
-  "core": "d81938796e4b700a8bbb35ef021d5890f324d299",
-  "javascript": "a3eff41461a02062c4c1eb96cdbd2321778a089d",
-  "c": "8a2ea45d2a16ac5544a83b34897ae9f268f50a86",
-  "gpu": "f937fb97e47dbf3ce7ed713d7e78cb98fbd59291",
-  "wasm": "bcef59f8e28ad3cad7505416a70a2363cfc431a5",
-  "runtime": "82f400ee6a10e6ba7384f7870dfe73492f824841",
-  "planner": "64d0fb411fe49befcf0de8371387a89a637bc48d",
-  "abi": "b7c883b4b17db6ae5d1d8b4f27caf137500d30a0"
+  "distribution": "058f30bca1531879c24c638e5b0e95c938ad89a1",
+  "core": "3ce90453f57e6e2639f93ef6d1a66ba1ad13921b",
+  "javascript": "478c42a460e68b0e18414f54643f9aba9608f38d",
+  "gpu": "fdcdb9b73755d97476bc987e6f155e4379319c46",
+  "wasm": "746d9f1f8ed9a1dbf782c58930ea0bd1d5ae87fc",
+  "runtime": "538b08040105b5e30873b435cdcd36954498f19a",
+  "planner": "3f6b90c6da8238a7018dcec6752ad929a4b1123a",
+  "abi": "b794d162b3e3770640d96516f9b640c11448cfbe",
+  "rust": "a75fa9ab45f3e2b7b6269859a9fab8e692e19090"
 }

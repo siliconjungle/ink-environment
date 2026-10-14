@@ -1,5 +1,5 @@
 /// <reference lib="webworker" />
-import { compileWasm, publishBundle } from "./clang.mjs";
+import { publishBundle } from "./bundle-cache.mjs";
 import { stringifyExactJSON } from "./exact-json.mjs";
 let instance: WebAssembly.Instance | undefined;
 const encoder = new TextEncoder();
@@ -47,11 +47,7 @@ self.onmessage = async ({ data }) => {
     const value = request(data.request);
     if (data.request.op === "compile" && value.bundle) {
       const base = new URL("./", data.compilerUrl).href;
-      const wasm = await compileWasm(value.bundle, base, (message: string) =>
-        self.postMessage({ id: data.id, progress: message }),
-      );
-      value.bundleUrl = await publishBundle(value, wasm, base);
-      value.wasmBytes = wasm.byteLength;
+      value.bundleUrl = await publishBundle(value, base);
     }
     self.postMessage({
       id: data.id,

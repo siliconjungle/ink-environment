@@ -1,4 +1,4 @@
-import { mkdir, writeFile, copyFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, copyFile, readFile, rm } from "node:fs/promises";
 import { createHash } from "node:crypto";
 const versions = JSON.parse(await readFile(new URL('../ink-pins.json', import.meta.url), 'utf8'));
 const pins = Object.fromEntries(['runtime', 'abi', 'gpu', 'planner'].map(name => [name, versions[name]]));
@@ -9,7 +9,6 @@ const repos = {
   planner: "ink-planner",
 };
 await mkdir("public/runtime", { recursive: true });
-await mkdir("public/clang", { recursive: true });
 const assets = {};
 async function asset(packageName, path, name) {
   const url = `https://raw.githubusercontent.com/siliconjungle/${repos[packageName]}/${pins[packageName]}/${path}`;
@@ -81,16 +80,9 @@ await writeFile(
     2,
   ),
 );
-for (const name of [
-  "index.js",
-  "clang.js",
-  "clang.wasm",
-  "lld.js",
-  "lld.wasm",
-  "sysroot.tar",
-])
-  await copyFile(`node_modules/browsercc/dist/${name}`, `public/clang/${name}`);
-await copyFile("node_modules/browsercc/LICENSE", "public/clang/LICENSE");
-console.log("Pinned Ink runtime, planner and browser Clang assets ready.");
+console.log("Pinned Ink runtime and planner assets ready.");
 
 await copyFile("LICENSE", "public/ink-license.txt");
+
+// Remove obsolete generated toolchain assets when upgrading an existing checkout.
+await rm("public/clang", {recursive:true, force:true});

@@ -3,17 +3,18 @@
 Edit an Ink program, compile it on your device, run it and inspect its output,
 execution placement and timings. This is a standalone package and static web app.
 
-The environment uses the real pinned Ink checker and C, JavaScript, Wasm and GPU
-lowering packages. A small Rust/Wasm transport exposes compilation and typed input
-validation. Browser Clang/LLVM links the emitted freestanding C into CPU Wasm.
-There is no evaluator used to execute programs, no compilation service and no
-precompiled-example substitution. Editing source changes the artifacts.
+The environment uses Ink's pinned checker and JavaScript, Rust, Wasm and GPU
+lowerings. Its Rust/Wasm compiler transport checks source and exact JSON inputs.
+JavaScript and eligible WGSL/WebGPU programs execute locally in the browser.
+State executes in the generated JavaScript host with normal rollback, events,
+versions and checkpoints. Compiled Rust source is available for download; native
+Rust and Rust/Wasm builds use the Ink CLI and Rust toolchain.
 
-Eligible pure numeric/record/vector/list modules produce JavaScript, CPU Wasm and
-WGSL. They run through Ink's unchanged packed runtime, shared ABI decision Wasm and
-independent bounded pipeline planner. Unsupported packed modules and state use the
-literal JavaScript host; the interface displays the actual capability reason.
-State scripts retain transactions, rollback, events and kept values.
+The C backend and browser Clang toolchain are removed. This browser editor does
+not compile Rust source to executable Wasm. Its checker still runs in Wasm, and
+the language distribution retains the Rust/Wasm execution backend. Browser
+execution selects fixed JavaScript or required WebGPU explicitly; no profitability
+probes run during Compile or Run. Unsupported device work reports an error.
 
 ## Run locally
 
@@ -37,33 +38,14 @@ The first packed compilation downloads roughly 90 MB of Clang/LLVM and C headers
 state-only compilation needs the approximately 3.7 MiB Ink compiler. Assets are
 loaded from the same deployment. Code and inputs are never sent to a server.
 
-## Adaptive execution and measurements
+## Execution and measurements
 
-**Compile** checks source, emits real targets and links Wasm. It does not execute
-user functions. **Run** invokes the compiled runtime. **Benchmark** repeats the
-whole captured workload and checks all returned values; state starts fresh on every
-invocation. Loading, compilation, typed input validation and output formatting have
-separate reported timing boundaries. Warm samples include output consumption and
-repeatability checking. Browser load and clock resolution affect these results.
-
-**Profile targets** explicitly collects pure segment observations, measures
-fresh-engine target startup and fits a profile using the existing planner. It checks
-all targets against CPU, then checks complete heldout requests with independently
-changed u32 list values. Alternative placement is retained only if warm median and
-cold-amortised execution beat CPU by 10% over the declared 256-call lifetime.
-Profiles with no winning alternative retain CPU. The observations, validation and
-actual dispatch/transfer counters are inspectable in the timing details.
-Profiles are local to a compiled bundle and measured browser session. Feature
-bounds and code/graph/runtime/planner identities remain Ink's existing contract.
-Changing input shape outside measured domains retains CPU. Ordinary adaptive runs
-never perform profitability probes. Diagnostic target selection is explicit and
-reports fallbacks; requesting GPU is not evidence it executed GPU work.
-
-The editor currently accepts single-file programs, function argument arrays,
-fresh state scripts (256 commands) and single-pass pure graphs (8 stages). Linked
-imports, automatic external knowledge search, feedback authoring and Rust-native
-execution are outside this release. Pure modules beyond the packed ABI execute on
-the host. These are environment limits, not claims about Ink language coverage.
+**Compile** checks source and emits JavaScript, Rust and eligible WGSL. **Run**
+executes the selected browser target once. **Benchmark** repeats the complete
+workload with fresh state, consumes every output and checks exact repeated
+values. These browser measurements describe the selected implementation only.
+Rust/Wasm execution and adaptive planning remain available in the native Ink
+build/runtime tooling; they are not browser Clang features.
 
 ## Embed
 
@@ -89,37 +71,10 @@ record the distribution, editor, package identities and SHA-256 hashes. The edit
 and documentation can therefore describe the same published language revision
 without assuming that the editor repository and compiler share a Git history.
 
-Browser Clang comes from [browsercc](https://github.com/BertalanD/browsercc),
-version 0.1.1, MIT. Ink assets retain their upstream provenance. This package has
-not been published to npm.
-
-Earlier production browser verification is retained in `browser-evidence.json` at its original package pins. It is historical evidence, not a timing claim for the updated compiler.
-The edited three-stage example compiled and returned the same u32 result on
-Wasm/JavaScript and actual WebGPU (three device dispatches). Explicit profiling
-selected GPU for the first two stages and Wasm for the reduction; heldout output
-checks and the warm/lifetime gate passed. These are measurements on this Mac and
-browser session, not a general speed claim.
-
-The Contracts example checks two implementations of a static specification.
-`Compiler.compile(source, contractEvidence?)` accepts source-bound evidence from
-Ink's contract proof producer. It is checked before any JavaScript, C/Wasm or
-WGSL emission; missing or invalid required proofs are compilation errors. This
-browser package does not run the external knowledge proof search. Simple clauses
-can be established by the core's default normalization proof. The emitted hosts
-retain precondition, transaction and invariant-checked restore behavior.
-
-Pass contract evidence as its original JSON text to preserve full-width proof
-integers: `await compiler.compile(source, await response.text())`. Programmatic
-objects must use BigInt for integers outside JavaScript’s safe range; the worker
-uses the exact JSON codec. Ordinary JSON.parse can irreversibly round proof data.
-
-Contract proof identities, full backend conformance and browser Compiler API
-checks are recorded in the distribution's
-[source-contract validation report](https://github.com/siliconjungle/ink-lang/tree/main/reports/source-contracts-2026-10-12).
 
 ## License and versions
 
-This standalone editor, browser compiler transport and documentation are [MIT licensed](LICENSE). Third-party dependencies and browser Clang retain their own licenses and notices. `ink-pins.json` records the exact compiler, lowerings, runtime and planner inputs; generated `compiler-info.json` and `environment-info.json` bind the built compiler and editor revision. The site exposes those manifests alongside the editor.
+This standalone editor, browser compiler transport and documentation are [MIT licensed](LICENSE). Third-party dependencies retain their own licenses and notices. `ink-pins.json` records the exact compiler, lowerings, runtime and planner inputs; generated `compiler-info.json` and `environment-info.json` bind the built compiler and editor revision. The site exposes those manifests alongside the editor.
 
 The pinned compiler emits the general portable-value and JSON codec interfaces. The editor remains a single-file compiler; the specification site's JSON flow demo runs a linked `std:json` program compiled by the distribution. Dynamic JSON stays on the CPU host.
 
