@@ -128,7 +128,7 @@ export function mountEnvironment(
     if (!artifact) return;
     if (entry.value === "@pipeline") {
       element("signature").textContent =
-        "Pure stage graph. Values flow through typed references; the saved profile guides placement.";
+        "Pure stage graph. Values flow through typed references on the selected target.";
     } else if (entry.value === "@script") {
       const names = artifact.manifest.state?.actions
         ?.map((a: any) => a.name)
