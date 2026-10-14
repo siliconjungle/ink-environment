@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "distribution": "058f30bca1531879c24c638e5b0e95c938ad89a1",
+  "distribution": "bba3a612646b26d16b3bf7e8dd00475dafa78e8b",
   "core": "3ce90453f57e6e2639f93ef6d1a66ba1ad13921b",
   "javascript": "478c42a460e68b0e18414f54643f9aba9608f38d",
-  "gpu": "fdcdb9b73755d97476bc987e6f155e4379319c46",
-  "wasm": "746d9f1f8ed9a1dbf782c58930ea0bd1d5ae87fc",
-  "runtime": "538b08040105b5e30873b435cdcd36954498f19a",
+  "gpu": "8f255e25bb334bd9f99c246a1b54d1bd33d6cbca",
+  "wasm": "72f8418c0f671ecb1801e84c6d7ff42aa1c49ebb",
+  "runtime": "7c0b795fefe1d3c7599492a8913edc601e0991ae",
   "planner": "3f6b90c6da8238a7018dcec6752ad929a4b1123a",
   "abi": "b794d162b3e3770640d96516f9b640c11448cfbe",
-  "rust": "a75fa9ab45f3e2b7b6269859a9fab8e692e19090"
+  "rust": "dcfc499ed76d10082064b2f32f28752723bc73fa"
 }
