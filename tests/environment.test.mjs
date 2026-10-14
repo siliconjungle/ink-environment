@@ -49,9 +49,11 @@ test("every shipped example uses the checker and exact input boundary", () => {
   for (const example of examples) {
     const artifact = compile(example.source);
     assert.ok(prepare(artifact, example.entry, example.input));
+    assert.equal(typeof artifact.rust, "string");
+    if (artifact.bundle) { assert.equal(typeof artifact.bundle.rust, "string"); assert.equal(Object.hasOwn(artifact.bundle, "c"), false); }
     assert.equal(
       !!artifact.bundle,
-      ["adaptive", "pipeline"].includes(example.id),
+      ["adaptive", "pipeline", "generic", "contracts"].includes(example.id),
     );
   }
 });
