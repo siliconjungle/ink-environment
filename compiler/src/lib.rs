@@ -78,7 +78,7 @@ pub fn handle(request: &Value) -> Result<Value, String> {
                     json!({"manifest":gpu.manifest,"shaders":gpu.shaders,"rust":rust}),
                 )
             })();
-            let rust = ink_lowering_rust::state_native::emit(checked.program());
+            let rust = ink_lowering_rust::state_native::emit_checked(&checked);
             let (rust, rust_reason) = match rust { Ok(value) => (json!(value),Value::Null), Err(error) => (Value::Null,json!(error)) };
             let (bundle, reason) = match bundle {
                 Ok(v) => (v, Value::Null),
