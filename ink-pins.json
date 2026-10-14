@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "distribution": "aaefec744b385960282dc42b302aab64e6d13f4e",
+  "distribution": "2f688461d219c013668de16bcb2ac4f7fa8d1d4f",
   "core": "3ce90453f57e6e2639f93ef6d1a66ba1ad13921b",
   "javascript": "478c42a460e68b0e18414f54643f9aba9608f38d",
   "gpu": "8f255e25bb334bd9f99c246a1b54d1bd33d6cbca",
   "wasm": "72f8418c0f671ecb1801e84c6d7ff42aa1c49ebb",
   "runtime": "7c0b795fefe1d3c7599492a8913edc601e0991ae",
-  "planner": "3f6b90c6da8238a7018dcec6752ad929a4b1123a",
+  "planner": "a1063bedf3dff1173d240630216cacb8d0ec750b",
   "abi": "b794d162b3e3770640d96516f9b640c11448cfbe",
   "rust": "dcfc499ed76d10082064b2f32f28752723bc73fa"
 }
