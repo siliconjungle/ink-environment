@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "distribution": "8d945dfbf423dbd4d62816a40abdbc00d97f8937",
-  "core": "3ce90453f57e6e2639f93ef6d1a66ba1ad13921b",
-  "javascript": "d982bd5de13227d78adbaa0f319923c1c9fbfc9f",
-  "gpu": "e1dce254d9dbe0e93a0f2dc728182a1f230cb9df",
-  "wasm": "bf32ee386de71411c570d2958e4c657ce77c02e5",
-  "runtime": "9a0f4fd8d584a2086b182a4e6f97a0f0c2884d4c",
-  "planner": "96184b9609bbf5120879a5786075d1150a3a831e",
+  "distribution": "6e826f79d6e6e3309e24597c3aba00d89eb11b0a",
+  "core": "0b0bf5ba4077b1e38a3e39051933ff3c7645b30d",
+  "javascript": "6a4a2bee6d30c8b733d71e3f0ec3b0f5605c7f91",
+  "gpu": "c156303654c67f0d3c040352193c24951d174bb4",
+  "wasm": "89c67f18deea3635ea40835a0563405dc777717b",
+  "runtime": "38f3d332ea6df62413d20355eade65ec0a981a4f",
+  "planner": "80a35454c15731d50cb127aa61a040fe47895842",
   "abi": "5c74c999f0852fe9f582311401f0d51905044356",
-  "rust": "3ac247cf1827c90230453c0920d560f842c39172"
+  "rust": "c8218c5f0df19b1ee2d4518377b97db2d2fd732d"
 }
