@@ -66,6 +66,10 @@ package module must also be served. `dispose()` stops pending work and removes t
 editor. Draft storage is optional; compiled bundles and profiles use browser caches.
 
 Exact inputs are recorded in `ink-pins.json` and the matching Cargo manifest/lock.
+`prepare:assets` also creates an ignored sparse checkout at `.ink-source`, pinned
+to the exact distribution revision. Every lowerer uses that core through Cargo's
+path override, matching the distribution build. Compiler builds verify its Git
+identity and reject local core changes; no latest-revision lookup is used.
 Generated `compiler-info.json`, `environment-info.json` and `runtime/assets.json`
 record the distribution, editor, package identities and SHA-256 hashes. The editor
 and documentation can therefore describe the same published language revision
@@ -79,6 +83,11 @@ This standalone editor, browser compiler transport and documentation are [MIT li
 The pinned compiler emits the general portable-value and JSON codec interfaces. The editor remains a single-file compiler; the specification site's JSON flow demo runs a linked `std:json` program compiled by the distribution. Dynamic JSON stays on the CPU host.
 
 The current JavaScript emission includes prepared state-call tokens and both portable (`callBinary`) and agreed-schema (`callCompact`) pure-call interfaces. Compact transport requires both peers to agree on exact argument/result schema identities; it does not change portable snapshots. The editor still compiles single files and does not run knowledge search. Its browser compiler, examples and public package are validated at the exact revisions in `ink-pins.json`.
+
+The query example uses typed ordered `list<T>{from ...; where ...; select ...;}`
+inside a normal function and consumes the result with `sum`. It preserves list
+order, duplicates and word arithmetic. It demonstrates connected source code;
+it does not implement external database pushdown or run optimisation search.
 
 Generated `JsonCodec` objects also expose explicit JavaScript-only `fromJS` and
 `toJS` adapters for plain object trees. These do not add implicit conversions to

@@ -74,6 +74,26 @@ fn transformed(xs: List<u32>) -> List<u32> {
     input: JSON.stringify([Array.from({ length: 2048 }, (_, i) => i), 3]),
   },
   {
+    id: "queries",
+    name: "Queries · filter, project and consume",
+    entry: "total",
+    source: `module queries;
+
+fn selected(xs: List<u32>, minimum: u32) -> List<u32> {
+    return list<u32>{
+        from x in xs;
+        where x >= minimum;
+        select x * 3;
+    };
+}
+
+fn total(xs: List<u32>, minimum: u32) -> u32 {
+    return sum(selected(xs, minimum));
+}
+`,
+    input: JSON.stringify([Array.from({ length: 2048 }, (_, i) => i), 100]),
+  },
+  {
     id: "generic",
     name: "Generics · collect before constructing",
     entry: "selected",

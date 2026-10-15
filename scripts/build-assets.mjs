@@ -1,5 +1,6 @@
 import { mkdir, writeFile, copyFile, readFile, rm } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import './prepare-core.mjs';
 const versions = JSON.parse(await readFile(new URL('../ink-pins.json', import.meta.url), 'utf8'));
 const pins = Object.fromEntries(['runtime', 'abi', 'gpu', 'planner'].map(name => [name, versions[name]]));
 const repos = {

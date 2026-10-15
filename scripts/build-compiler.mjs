@@ -1,6 +1,8 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import {verifyCore} from './prepare-core.mjs';
+verifyCore();
 mkdirSync("public", { recursive: true });
 execFileSync(
   "cargo",

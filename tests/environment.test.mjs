@@ -53,9 +53,18 @@ test("every shipped example uses the checker and exact input boundary", () => {
     if (artifact.bundle) { assert.equal(typeof artifact.bundle.rust, "string"); assert.equal(Object.hasOwn(artifact.bundle, "c"), false); }
     assert.equal(
       !!artifact.bundle,
-      ["adaptive", "pipeline", "generic", "contracts"].includes(example.id),
+      ["adaptive", "pipeline", "queries", "generic", "contracts"].includes(example.id),
     );
   }
+});
+test("ordered query syntax preserves duplicates and composes with an ordinary consumer", async () => {
+  const example=examples.find(x=>x.id==='queries');
+  const artifact=compile(example.source), module=await load(artifact);
+  assert.deepEqual(module.functions.selected([3,1,3,2],2),[9,9,6]);
+  assert.equal(module.functions.total([3,1,3,2],2),24);
+  assert.deepEqual(module.functions.selected([],0),[]);
+  assert.equal(module.functions.total([],0),0);
+  assert.deepEqual(module.functions.selected([4294967295],0),[4294967293]);
 });
 test("pipeline rejects untyped ports, forward references and domain errors", () => {
   const artifact = compile(examples[0].source);
