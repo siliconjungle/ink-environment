@@ -3,8 +3,8 @@ import {highlightCode,tokenize,formatInk,formatJSON} from '../src/ink-syntax.mjs
 import {examples} from '../src/examples.ts';
 const meaningful=s=>tokenize(s).filter(t=>t.kind!=='space').map(t=>[t.kind,t.text]);
 test('Ink tokens cover adaptive declarations, contracts, queries, operators and precise numbers',()=>{
- const source=`trainable state Model:List<f64> = [1e-12f64, 0xFF, 1_000];\nadaptive fn f<T>(x:T)->T { return x; }\nlearn change fit() -> Result<Unit,String> writes(Model) ensures(true, "<safe>") { return Ok(()); }\n// from 123\n/* \'quoted\' */\nlist<u32>{from x in xs; semi join y in ys on x==y; select x & 3 | ~4 ^ 2;}\n`;
- const html=highlightCode(source);for(const k of ['trainable','adaptive','learn','ensures','semi','join','select'])assert.ok(html.includes(`class="tok-keyword">${k}</span>`),k);
+ const source=`trainable state Model:List<f64> = [1e-12f64, 0xFF, 1_000];\nadaptive fn f<T>(x:T)->T { return x; }\nlearn change fit() -> Result<Unit,String> writes(Model) ensures(true, "<safe>") { return Ok(()); }\nprotocol preflight; proof by calc { _ == x by provided; }\n// from 123\n/* \'quoted\' */\nlist<u32>{from x in xs; semi join y in ys on x==y; select x & 3 | ~4 ^ 2;}\n`;
+ const html=highlightCode(source);for(const k of ['trainable','adaptive','learn','ensures','semi','join','select','protocol','preflight','proof','calc','provided'])assert.ok(html.includes(`class="tok-keyword">${k}</span>`),k);
  for(const n of ['1e-12f64','0xFF','1_000'])assert.ok(html.includes(`class="tok-number">${n}</span>`),n);
  assert.ok(html.includes('class="tok-constant">Ok</span>'));assert.ok(html.includes('class="tok-function">f</span>'));
  assert.ok(!html.includes('<safe>'));assert.ok(html.includes('&lt;safe&gt;'));assert.ok(html.includes('class="tok-comment">// from 123</span>'));
