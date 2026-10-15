@@ -1,4 +1,5 @@
 import "./style.css";
+import {highlightCode, formatInk, formatJSON} from "./ink-syntax.mjs";
 import { enableBundles } from "./bundles";
 import { Compiler, Runner, type Artifact } from "./client";
 import { examples } from "./examples";
@@ -44,8 +45,8 @@ export function mountEnvironment(
   <div class="env-intro"><div><h1>Write. Compile. Run.</h1><p>Edit Ink. Compile real targets. See the results and where the work ran.</p></div><a class="env-repo" href="https://github.com/siliconjungle/ink-environment">Editor source ↗</a></div>
   <div class="env-toolbar"><label>Example <select id="env-example" aria-label="Example program"></select></label><div class="env-actions"><button id="env-compile" class="env-primary">Compile</button><button id="env-run" disabled>Run</button><button id="env-benchmark" disabled>Benchmark</button><button id="env-stop" disabled>Stop</button></div></div>
   <div class="env-execution"><label>Execution <select id="env-backend"><option value="javascript">JavaScript</option><option value="gpu">WebGPU · requires device support</option></select></label><span>Rust/Wasm builds use the native Ink toolchain.</span></div><div class="env-status" role="status" aria-live="polite"><span id="env-status">Ready to compile.</span><span id="env-size"></span></div>
-  <div class="env-grid"><section class="env-panel env-source"><div class="env-panel-heading"><h2>Ink source</h2><span>⌘ / Ctrl + Enter to compile</span></div><label class="env-sr" for="env-source">Ink source</label><div class="env-editor"><pre id="env-lines" aria-hidden="true"></pre><textarea id="env-source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div></section>
-  <div class="env-right"><section class="env-panel"><div class="env-panel-heading"><h2>Inputs</h2><select id="env-entry" aria-label="Entry point" disabled><option>Compile to choose an entry</option></select></div><p id="env-signature" class="env-signature">A state script or a function's JSON arguments.</p><label class="env-sr" for="env-input">Input JSON</label><textarea id="env-input" class="env-input" spellcheck="false" wrap="off"></textarea><details class="env-help"><summary>Input format</summary><p>Functions take a JSON argument array, for example <code>[[1, 2, 3], 2]</code>. State scripts take <code>[{"call":"total","args":[]}]</code>. Integer tokens keep their exact precision; use <code>{"Int":"123"}</code> for exact Int values. Pure pipelines use <code>{"inputs":{},"steps":[{"id":"a","call":"transform","args":[[1,2,3]]}]}</code>; later arguments can use <code>{"step":"a"}</code>. Single-file programs only.</p></details></section>
+  <div class="env-grid"><section class="env-panel env-source"><div class="env-panel-heading"><h2>Ink source</h2><div><button id="env-format-source">Format code</button> <span>⌘ / Ctrl + Enter to compile</span></div></div><label class="env-sr" for="env-source">Ink source</label><div class="env-editor"><pre id="env-lines" aria-hidden="true"></pre><div class="env-code-area"><pre id="env-source-highlight" aria-hidden="true"></pre><textarea id="env-source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div></div></section>
+  <div class="env-right"><section class="env-panel"><div class="env-panel-heading"><h2>Inputs</h2><button id="env-format-input">Format data</button><select id="env-entry" aria-label="Entry point" disabled><option>Compile to choose an entry</option></select></div><p id="env-signature" class="env-signature">A state script or a function's JSON arguments.</p><label class="env-sr" for="env-input">Input JSON</label><div class="env-code-area env-input-editor"><pre id="env-input-highlight" aria-hidden="true"></pre><textarea id="env-input" class="env-input" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div><details class="env-help"><summary>Input format</summary><p>Functions take a JSON argument array, for example <code>[[1, 2, 3], 2]</code>. State scripts take <code>[{"call":"total","args":[]}]</code>. Integer tokens keep their exact precision; use <code>{"Int":"123"}</code> for exact Int values. Pure pipelines use <code>{"inputs":{},"steps":[{"id":"a","call":"transform","args":[[1,2,3]]}]}</code>; later arguments can use <code>{"step":"a"}</code>. Single-file programs only.</p></details></section>
   <section class="env-panel env-result"><div class="env-panel-heading"><h2>Results</h2><button id="env-download-result" disabled>Download JSON</button></div><pre id="env-result" tabindex="0">Compile your program, then run it.</pre></section></div></div>
   <section class="env-panel env-placement"><div class="env-panel-heading"><h2>Execution placement</h2><span id="env-targets">Compile to inspect targets</span></div><div id="env-stage-strip" class="env-stage-strip"></div><pre id="env-placement">No execution yet.</pre></section><section class="env-panel env-performance"><div class="env-panel-heading"><h2>Performance</h2><span>Measured here, on this browser</span></div><div class="env-metrics"><div><span>Compile</span><strong id="env-compile-time">—</strong></div><div><span>First execution + output consumption</span><strong id="env-first-time">—</strong></div><div><span>Repeated median · output checked</span><strong id="env-median-time">—</strong></div><div><span>Samples</span><strong id="env-sample-count">—</strong></div></div><p id="env-measure-note">Run records one execution. Benchmark repeats the complete workload, starting with fresh state each time and consuming every returned value.</p><details><summary>Timing boundary and samples</summary><pre id="env-details">No measurements yet.</pre><p>Execution includes function calls or state creation and the full command script, plus output consumption and repeatability checks. Compiler loading, compilation, input validation/conversion, module loading and output formatting are separate. Rendering and worker message delivery are outside the execution timer. These are local measurements, not a comparison against another language or backend.</p></details></section>
   <details class="env-generated"><summary>Compiled artifacts <span id="env-code-size"></span></summary><button id="env-download-js" disabled>Download JavaScript</button><button id="env-download-rust" disabled>Download Rust source</button><pre id="env-generated-code" tabindex="0">No compiled module yet.</pre></details>
@@ -87,8 +88,17 @@ export function mountEnvironment(
     example.disabled = busy;
     source.readOnly = busy;
     input.readOnly = busy;
+    element<HTMLButtonElement>("format-source").disabled=busy;
+    element<HTMLButtonElement>("format-input").disabled=busy;
   }
+  function paint(editor:HTMLTextAreaElement, id:string, language:string) {
+    const mirror=element(id);mirror.innerHTML=highlightCode(editor.value,language)+"\n";
+    mirror.scrollTop=editor.scrollTop;mirror.scrollLeft=editor.scrollLeft;
+  }
+  function pretty(text:string){try{return formatJSON(text);}catch{return text;}}
+  function formattedSource(text:string){try{return formatInk(text);}catch{return text;}}
   function lines() {
+    paint(source,"source-highlight","ink");
     element("lines").textContent = Array.from(
       { length: source.value.split("\n").length },
       (_, i) => String(i + 1),
@@ -273,10 +283,9 @@ export function mountEnvironment(
       );
       if (disposed || current !== sequence) return;
       resultJson = value.resultJson;
-      element("result").textContent =
-        resultJson.length > 60000
-          ? `${resultJson.slice(0, 60000)}\n… display truncated. Download JSON for the complete result.`
-          : pretty(resultJson);
+      const display=pretty(resultJson);
+      element("result").innerHTML=highlightCode(display.slice(0,60000),"json");
+      if(display.length>60000)element("result").append(document.createTextNode("\n… display truncated. Download JSON for the complete result."));
       element<HTMLButtonElement>("download-result").disabled = false;
       element("first-time").textContent = format(value.firstMs);
       element("median-time").textContent = format(value.medianMs);
@@ -372,42 +381,14 @@ export function mountEnvironment(
       }
     }
   }
-  function pretty(text: string) {
-    // Pretty-print without reparsing exact integers through JavaScript Number.
-    let result = "",
-      indent = 0,
-      string = false,
-      escaped = false;
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (string) {
-        result += c;
-        if (escaped) escaped = false;
-        else if (c === "\\") escaped = true;
-        else if (c === '"') string = false;
-        continue;
-      }
-      if (c === '"') {
-        string = true;
-        result += c;
-      } else if (c === "{" || c === "[") {
-        result += c;
-        if (text[i + 1] !== "}" && text[i + 1] !== "]") {
-          indent++;
-          result += "\n" + "  ".repeat(indent);
-        }
-      } else if (c === "}" || c === "]") {
-        if (text[i - 1] !== "{" && text[i - 1] !== "[") {
-          indent--;
-          result += "\n" + "  ".repeat(Math.max(0, indent));
-        }
-        result += c;
-      } else if (c === ",") result += ",\n" + "  ".repeat(indent);
-      else if (c === ":") result += ": ";
-      else result += c;
-    }
-    return result;
-  }
+  element("format-source").onclick=()=>{
+    try{source.setRangeText(formatInk(source.value),0,source.value.length,"preserve");source.dispatchEvent(new Event("input"));status("Source formatted. Compile to run it.");}
+    catch(error){status(error instanceof Error?error.message:String(error),true);}
+  };
+  element("format-input").onclick=()=>{
+    try{input.setRangeText(formatJSON(input.value),0,input.value.length,"preserve");input.dispatchEvent(new Event("input"));status("Data formatted; exact numeric tokens preserved.");}
+    catch(error){status(error instanceof Error?error.message:String(error),true);}
+  };
   compileButton.onclick = compile;
   runButton.onclick = () => run(false);
   benchmarkButton.onclick = () => run(true);
@@ -421,8 +402,9 @@ export function mountEnvironment(
   };
   example.onchange = () => {
     selectedExample = examples.find((value) => value.id === example.value)!;
-    source.value = selectedExample.source;
-    input.value = selectedExample.input;
+    source.value = formattedSource(selectedExample.source);
+    input.value = pretty(selectedExample.input);
+    paint(input,"input-highlight","json");
     void release(artifact);
     artifact = null;
     lines();
@@ -439,8 +421,12 @@ export function mountEnvironment(
   };
   source.onscroll = () => {
     element("lines").scrollTop = source.scrollTop;
+    element("source-highlight").scrollTop=source.scrollTop;
+    element("source-highlight").scrollLeft=source.scrollLeft;
   };
+  input.onscroll=()=>{element("input-highlight").scrollTop=input.scrollTop;element("input-highlight").scrollLeft=input.scrollLeft;};
   input.oninput = () => {
+    paint(input,"input-highlight","json");
     resetRun();
     save();
   };
@@ -475,8 +461,8 @@ export function mountEnvironment(
   element("download-rust").onclick = () => { if (artifact?.rust) download(artifact.rust, "ink-program.rs", "text/plain"); };
   element("download-result").onclick = () =>
     download(resultJson, "ink-result.json", "application/json");
-  source.value = options.initialSource ?? selectedExample.source;
-  input.value = options.initialInput ?? selectedExample.input;
+  source.value = options.initialSource ?? formattedSource(selectedExample.source);
+  input.value = options.initialInput ?? pretty(selectedExample.input);
   if (options.storageKey && !options.initialSource && !options.initialExample) {
     try {
       const saved = JSON.parse(
@@ -498,6 +484,7 @@ export function mountEnvironment(
     }
   }
   lines();
+  paint(input,"input-highlight","json");
   controls();
   return {
     compile,

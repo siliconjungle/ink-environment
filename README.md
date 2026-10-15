@@ -93,3 +93,23 @@ Generated `JsonCodec` objects also expose explicit JavaScript-only `fromJS` and
 `toJS` adapters for plain object trees. These do not add implicit conversions to
 Ink execution or native/Wasm callers. The site's linked JSON program demonstrates
 the boundary; importing `std:json` remains outside the single-file editor's scope.
+
+## Highlighting and formatting
+
+Source and JSON inputs use native textareas with inert highlighted mirrors, so
+selection, keyboard navigation, IME input and assistive labels retain their normal
+behavior. Colors update while editing and track both scroll directions. Forced
+colors uses the native text view. Results use the same escaped JSON highlighter.
+
+Examples open with formatted code and data. **Format code** changes whitespace
+only and checks that literal/comment/operator tokens remain unchanged. **Format
+data** preserves exact numeric tokens, duplicate keys and string escapes; it never
+rounds inputs through JavaScript Number. Long numeric arrays wrap into rows.
+Malformed drafts stay editable; formatting reports an error without replacing them.
+Download JSON retains the complete original result, independently of its preview.
+
+The shared lexer and formatters are exported as
+`@siliconjungle/ink-environment/syntax` for the docs site's static examples.
+Highlighting supports the current Ink vocabulary, including adaptive declarations,
+contracts, query clauses, generic types, precise float literals and word operators.
+Presentation support does not expand the pinned browser compiler's accepted syntax.

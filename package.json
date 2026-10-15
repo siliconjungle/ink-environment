@@ -6,7 +6,8 @@
   "private": true,
   "exports": {
     ".": "./dist/package/index.js",
-    "./style.css": "./dist/package/style.css"
+    "./style.css": "./dist/package/style.css",
+    "./syntax": "./src/ink-syntax.mjs"
   },
   "files": [
     "dist/package",
@@ -16,7 +17,9 @@
     "compiler/src",
     "README.md",
     "LICENSE",
-    "ink-pins.json"
+    "ink-pins.json",
+    "src/ink-syntax.mjs",
+    "src/ink-syntax.d.mts"
   ],
   "scripts": {
     "build:compiler": "node scripts/build-compiler.mjs",

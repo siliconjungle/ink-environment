@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { examples } from "../src/examples.ts";
+import {formatInk,formatJSON} from "../src/ink-syntax.mjs";
 import {
   prepareNative,
   execute,
@@ -150,4 +151,14 @@ test("static contracts share collection semantics and reject false implementatio
   assert.equal(module.functions.same_bag([1,2,1],[2,1,1]),true);
   assert.throws(()=>compile(example.source.replace("return 1+x;","return x;")),/contract|proof|ensures/);
   assert.throws(()=>request({op:"compile",source:example.source,contractEvidence:{schema:1,semantics:"ink-contracts-v1",source_sha256:"wrong"}}));
+});
+
+
+test("formatted examples still compile and keep their exact typed inputs", () => {
+  for(const example of examples){
+    const original=compile(example.source),formatted=compile(formatInk(example.source));
+    const before=prepare(original,example.entry,example.input);
+    const after=prepare(formatted,example.entry,formatJSON(example.input));
+    assert.deepEqual(after,before,example.id);
+  }
 });

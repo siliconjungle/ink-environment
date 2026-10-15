@@ -156,7 +156,7 @@ body:has(.ink-environment) {
   height: 560px;
   background: #141713;
 }
-.env-editor pre {
+.env-editor > pre {
   width: 48px;
   flex-shrink: 0;
   user-select: none;
@@ -424,4 +424,35 @@ body:has(.ink-environment) {
 .env-stage span {
   font-size: 12px;
   color: #9db5ff;
+}
+/* A native textarea retains selection, IME, keyboard navigation and accessibility;
+   the inert mirror provides colors with precisely the same font and geometry. */
+.env-code-area { position: relative; flex: 1; min-width: 0; overflow: hidden; }
+.env-code-area pre,
+.ink-environment .env-code-area textarea {
+  margin: 0; padding: 16px; border: 0; width: 100%; height: 100%;
+  font: 12px/1.7 "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-variant-ligatures: none; letter-spacing: normal; tab-size: 4;
+  white-space: pre; overflow-wrap: normal; word-break: normal; text-align: left;
+}
+.env-code-area pre { position: absolute; inset: 0; overflow: hidden; pointer-events: none; color: #d9dfcf; }
+.ink-environment .env-code-area textarea {
+  position: relative; display: block; resize: none; background: transparent;
+  color: transparent; -webkit-text-fill-color: transparent; caret-color: #f2f2ec;
+}
+.env-code-area textarea::selection { background: #667c9a66; }
+.env-input-editor { height: 220px; min-height: 120px; max-height: 700px; resize: vertical; }
+.env-source .env-panel-heading > div { color: var(--muted); font-size: 11px; }
+.ink-environment .tok-keyword { color: #c6aff0; }
+.ink-environment .tok-type { color: #91cbd7; }
+.ink-environment .tok-function { color: #e8d69e; }
+.ink-environment .tok-string { color: #b6d39a; }
+.ink-environment .tok-number { color: #ecb080; }
+.ink-environment .tok-constant { color: #e9b48f; }
+.ink-environment .tok-property { color: #a5cce6; }
+.ink-environment .tok-operator { color: #c4c8d3; }
+.ink-environment .tok-comment { color: #929a86; font-style: italic; }
+@media (forced-colors: active) {
+  .env-code-area pre { display: none; }
+  .ink-environment .env-code-area textarea { color: CanvasText; -webkit-text-fill-color: CanvasText; caret-color: CanvasText; }
 }
