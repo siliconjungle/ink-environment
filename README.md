@@ -105,7 +105,9 @@ Examples open with formatted code and data. **Format code** changes whitespace
 only and checks that literal/comment/operator tokens remain unchanged. **Format
 data** preserves exact numeric tokens, duplicate keys and string escapes; it never
 rounds inputs through JavaScript Number. Long numeric arrays wrap into rows.
-Malformed drafts stay editable; formatting reports an error without replacing them.
+Unfinished strings/comments and unbalanced delimiters stay editable; formatting
+reports an error without replacing them. It is a presentation formatter, not a
+replacement for compiler validation.
 Download JSON retains the complete original result, independently of its preview.
 
 The shared lexer and formatters are exported as

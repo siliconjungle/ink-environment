@@ -53,7 +53,7 @@ export function formatInk(text,{width=88}={}){
  const write=(s,space=false)=>{if(space&&line&&!line.endsWith(' '))line+=' ';line+=s;};
  for(let i=0;i<ts.length;i++){const t=ts[i],s=t.text,next=ts[i+1]?.text??'';
   if(t.kind==='unknown')throw new SyntaxError('Finish the source before formatting');
-  if(t.kind==='string'&&(!s.endsWith('"')||s.length<2))throw new SyntaxError('Unclosed string');
+  if(t.kind==='string'){try{JSON.parse(s);}catch{throw new SyntaxError('Finish the string before formatting');}}
   if(t.kind==='comment'){
    if(s.startsWith('/*')&&!s.endsWith('*/'))throw new SyntaxError('Unclosed comment');
    if(s.startsWith('//')){write(s,!!line);lines.push('    '.repeat(level)+line.trimStart());line='';}else{flush();lines.push('    '.repeat(level)+s);}previous='';continue;

@@ -95,7 +95,14 @@ export function mountEnvironment(
     const mirror=element(id);mirror.innerHTML=highlightCode(editor.value,language)+"\n";
     mirror.scrollTop=editor.scrollTop;mirror.scrollLeft=editor.scrollLeft;
   }
-  function pretty(text:string){try{return formatJSON(text);}catch{return text;}}
+  function dataWidth(){
+    const style=getComputedStyle(input),context=document.createElement("canvas").getContext("2d");
+    if(!context)return 72;
+    context.font=`${style.fontSize} ${style.fontFamily}`;
+    const cell=context.measureText("0").width||7.2;
+    return Math.max(24,Math.floor((input.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-16)/cell));
+  }
+  function pretty(text:string){try{return formatJSON(text,{width:dataWidth()});}catch{return text;}}
   function formattedSource(text:string){try{return formatInk(text);}catch{return text;}}
   function lines() {
     paint(source,"source-highlight","ink");
@@ -386,7 +393,7 @@ export function mountEnvironment(
     catch(error){status(error instanceof Error?error.message:String(error),true);}
   };
   element("format-input").onclick=()=>{
-    try{input.setRangeText(formatJSON(input.value),0,input.value.length,"preserve");input.dispatchEvent(new Event("input"));status("Data formatted; exact numeric tokens preserved.");}
+    try{input.setRangeText(formatJSON(input.value,{width:dataWidth()}),0,input.value.length,"preserve");input.dispatchEvent(new Event("input"));status("Data formatted; exact numeric tokens preserved.");}
     catch(error){status(error instanceof Error?error.message:String(error),true);}
   };
   compileButton.onclick = compile;
